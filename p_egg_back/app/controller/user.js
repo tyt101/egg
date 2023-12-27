@@ -1,3 +1,5 @@
+const { jwt } = require('../../config/plugin');
+
 const Controller = require('egg').Controller;
 
 const defaultAvatar = 'http://s.yezgea02.com/1615973940679/WeChat77d6d2ac093e247c361f0b8a7aeb6c2a.png';
@@ -6,7 +8,7 @@ class UserController extends Controller {
   async test() {
     const { ctx, app } = this;
     const token = ctx.request.header.authorization;
-    const decode = await app.jwt.verify(token, app.jwt.secret);
+    const decode = await app.jwt.verify(token, app.config.jwt.secret);
     ctx.body = {
       code: 200,
       message: '获取成功',
@@ -98,6 +100,50 @@ class UserController extends Controller {
       data: {
         token,
       },
+    };
+  }
+
+  async getUserInfo() {
+    const { ctx, app } = this;
+    const token = ctx.request.header.authorization;
+
+    const decode = app.jwt.verify(token, app.config.jwt.secret);
+
+    const userInfo = await ctx.service.user.getUserByName(decode.username);
+
+    ctx.body = {
+      code: 200,
+      message: '获取成功',
+      data: {
+        id: userInfo.id,
+        username: userInfo.username,
+        signature: userInfo.signature || '',
+        avatar: userInfo.avatar || defaultAvatar,
+      },
+    };
+  }
+
+  async editUserInfo() {
+    const { ctx, app } = this;
+    const { signature = '', avatar = '' } = ctx.request.body;
+    const token = ctx.request.header.authorization;
+    const decode = await app.jwt.verify(token, app.config.jwt.secret);
+    if (!decode) return;
+    const user_id = decode.id;
+
+    const userInfo = await ctx.service.user.getUserByName(decode.username);
+
+    await ctx.service.user.editUserInfo({
+      ...userInfo,
+      signature,
+      avatar,
+    });
+
+    ctx.body = {
+      id: user_id,
+      signature,
+      username: userInfo.username,
+      avatar,
     };
   }
 }

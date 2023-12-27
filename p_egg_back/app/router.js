@@ -12,4 +12,14 @@ module.exports = app => {
   router.post('/api/user/register', controller.user.register);
   router.post('/api/user/login', controller.user.login);
 
+  // getUserInfo
+  router.get('/api/user/get_userinfo', _jwt, controller.user.getUserInfo);
+  // editUserInfo
+  router.post('/api/user/edit_userinfo', _jwt, controller.user.editUserInfo);
+
+
+  // common
+  // upload
+  router.post('/api/upload/upload', controller.upload.upload);
+
 };
