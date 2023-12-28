@@ -3,6 +3,7 @@ import { Toast } from "zarm";
 
 // 获取环境变量
 const MODE = import.meta.env.MODE
+console.log('MODE:', MODE)
 
 axios.defaults.baseURL = MODE == 'development' ? '/api': 'http://api.chennick.wang'
 axios.defaults.withCredentials = true
