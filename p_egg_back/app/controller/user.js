@@ -1,4 +1,3 @@
-const { jwt } = require('../../config/plugin');
 
 const Controller = require('egg').Controller;
 
