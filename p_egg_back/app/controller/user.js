@@ -139,10 +139,14 @@ class UserController extends Controller {
     });
 
     ctx.body = {
-      id: user_id,
-      signature,
-      username: userInfo.username,
-      avatar,
+      code: 200,
+      msg: '请求成功',
+      data: {
+        id: user_id,
+        signature,
+        username: userInfo.username,
+        avatar,
+      },
     };
   }
 }

@@ -46,7 +46,7 @@ class BillController extends Controller {
   async list() {
     const { ctx, app } = this;
 
-    const { date, page = 1, page_size = 5, type_id = 'all' } = ctx.query;
+    const { date = '', page = 1, page_size = 5, type_id = 'all' } = ctx.query;
     try {
       const token = ctx.request.header.authorization;
       const decode = await app.jwt.verify(token, app.config.jwt.secret);
@@ -55,24 +55,31 @@ class BillController extends Controller {
       const list = await ctx.service.bill.list(user_id);
       const _list = list.filter(item => {
         if (type_id !== 'all') {
-          return moment(item.date).format('YYYY-MM-DD') === date && type_id === item.type_id;
+          return type_id === item.type_id;
+        }
+        return item;
+      });
+      const __list = _list.filter(item => {
+        if (!date) {
+          return item;
         }
         return moment(item.date).format('YYYY-MM-DD') === date;
       });
-      const listMap = _list.reduce((curArr, item) => {
+      const listMap = __list.reduce((curArr, item) => {
         // 格式转换
-        const date = moment(item.date).format('YYYY-MM-DD');
+        const curDate = moment(item.date).format('YYYY-MM-DD');
+
         if (!curArr.length) {
           curArr.push({
-            date,
+            curDate,
             bills: [ item ],
           });
-        } else if (curArr && curArr.findIndex(item => item.date === date) > -1) {
-          const index = curArr.findIndex(item => item.date === date);
+        } else if (curArr && curDate && curArr.findIndex(item => item.date === curDate) > -1) {
+          const index = curArr.findIndex(item => item.date === curDate);
           curArr[index].bills.push(item);
         } else {
           curArr.push({
-            date,
+            curDate,
             bills: [ item ],
           });
         }
@@ -107,6 +114,7 @@ class BillController extends Controller {
           totalIncome,
           totalExpense,
           totalPage: Math.ceil(listMap.length / page_size),
+          totalCount: listMap.length,
           list: filterListMap || [],
         },
       };
@@ -116,6 +124,115 @@ class BillController extends Controller {
         code: 500,
         msg: '系统错误',
         date: error,
+      };
+    }
+  }
+
+  async detail() {
+    const { ctx, app } = this;
+    const { id = '' } = ctx.request.query;
+
+    const token = ctx.request.header.authorization;
+
+    const decode = app.jwt.verify(token, app.config.jwt.secret);
+    if (!decode) return;
+    const user_id = decode.id;
+
+    if (!id) {
+      ctx.body = {
+        code: 400,
+        msg: '订单id不能为空',
+        data: null,
+      };
+    }
+    try {
+      const detail = await ctx.service.bill.detail(id, user_id);
+      ctx.body = {
+        code: 200,
+        msg: '请求成功',
+        data: detail,
+      };
+    } catch (error) {
+      ctx.body = {
+        code: 500,
+        msg: '系统错误',
+        data: error,
+      };
+    }
+  }
+
+  async modify() {
+    const { ctx, app } = this;
+    const { id, pay_type, amount, date, type_id, type_name, remark } = ctx.request.body;
+    if (!id) {
+      ctx.body = {
+        code: 400,
+        msg: 'id 不能为空',
+        data: null,
+      };
+    }
+    const row = {};
+    if (pay_type) {
+      row.pay_type = pay_type;
+    }
+    if (amount) row.amount = amount;
+    if (date) row.date = date;
+    if (type_id) row.type_id = type_id;
+    if (type_name) row.type_name = type_name;
+    if (remark) row.remark = remark;
+    try {
+      const token = ctx.request.header.authorization;
+      const decode = await app.jwt.verify(token, app.config.jwt.secret);
+      if (!decode) return;
+      const user_id = decode.id;
+      const result = await ctx.service.bill.modify({
+        id,
+        ...row,
+        user_id,
+      });
+      ctx.body = {
+        code: 200,
+        msg: '请求成功',
+        data: result,
+      };
+    } catch (error) {
+      ctx.body = {
+        code: 500,
+        msg: '系统错误',
+        data: error,
+      };
+    }
+  }
+
+  async del() {
+    const { ctx, app } = this;
+
+    const { id = '' } = ctx.request.query;
+
+    if (!id) {
+      ctx.body = {
+        code: 400,
+        msg: 'id不能为空',
+        data: null,
+      };
+    }
+
+    const token = ctx.request.header.authorization;
+    const decode = await app.jwt.verify(token, app.config.jwt.secret);
+    if (!decode) return;
+
+    try {
+      const result = await ctx.service.bill.del(id);
+      ctx.body = {
+        code: 200,
+        msg: '请求成功',
+        data: result,
+      };
+    } catch (error) {
+      ctx.body = {
+        code: 500,
+        msg: '系统错误',
+        data: error,
       };
     }
   }

@@ -31,4 +31,10 @@ module.exports = app => {
   router.post('/api/bill/add', _jwt, controller.bill.add);
   // get bill list
   router.get('/api/bill/list', _jwt, controller.bill.list);
+  // get single bill detail
+  router.get('/api/bill/detail', _jwt, controller.bill.detail);
+  // modify single bill info
+  router.post('/api/bill/modify', _jwt, controller.bill.modify);
+  // delete single bill
+  router.post('/api/bill/del', _jwt, controller.bill.del);
 };

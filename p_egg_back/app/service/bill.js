@@ -24,5 +24,46 @@ class BillService extends Service {
       return null;
     }
   }
+
+  async detail(id, user_id) {
+    const { app } = this;
+    try {
+      const result = await app.mysql.get('bill', { id, user_id });
+      return result;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  }
+
+  async modify(params) {
+    const { app } = this;
+    try {
+      await app.mysql.update('bill', {
+        ...params,
+      }, {
+        where: {
+          id: 1,
+        },
+      });
+      return params.id;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  }
+
+  async del(id) {
+    const { app } = this;
+    try {
+      await app.mysql.delete('bill', {
+        id,
+      });
+      return id;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  }
 }
 module.exports = BillService;
