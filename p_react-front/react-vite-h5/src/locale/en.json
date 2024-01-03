@@ -1,0 +1,8 @@
+{
+  "登录": "LOGIN",
+  "注册": "REGISTER",
+  "账本": "Account Book",
+  "请输入账号": "Please input account",
+  "请输入密码": "Please input password",
+  "请输入验证码": "Please input verify"
+}
