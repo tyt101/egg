@@ -5,9 +5,10 @@ import PropTypes from 'prop-types'
 import { TabBar } from "zarm";
 import { useNavigate } from "react-router-dom";
 import CustomIcon from "../CustomIcon";
-import s from './style.module.less'
-
+import { useTranslation } from "react-i18next";
 const NavBar = ({showNav}) => {
+  const { t } = useTranslation()
+
   const [activeKey, setActiveKey] = useState('/')
   const navigateTo = useNavigate()
 
@@ -22,17 +23,17 @@ const NavBar = ({showNav}) => {
     <TabBar activeKey={activeKey} onChange={changeTab} visible={showNav}>
       <TabBar.Item
         itemKey='/'
-        title='账单'
+        title={t('账单')}
         icon={<CustomIcon type="icon-zhangdan" />}
       />
       <TabBar.Item
         itemKey='/data'
-        title='统计'
+        title={t('统计')}
         icon={<CustomIcon type="icon-tongjifenxi-xiangmubiaogetongji" />}
       />
       <TabBar.Item
         itemKey='/user'
-        title='我的'
+        title={t('我的')}
         icon={<CustomIcon type="icon-31wode" />}
       />
     </TabBar>

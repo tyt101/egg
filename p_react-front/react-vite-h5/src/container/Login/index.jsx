@@ -44,6 +44,7 @@ const Login = () => {
         });
         localStorage.setItem('EGG_TOKEN', data.token)
         Toast.show('登录成功');
+        window.location.href = '/';
       } else {
         if (!verify) {
           Toast.show('请输入验证码')
