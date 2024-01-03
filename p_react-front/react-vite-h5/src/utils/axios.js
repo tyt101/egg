@@ -5,7 +5,8 @@ import { Toast } from "zarm";
 const MODE = import.meta.env.MODE
 console.log('MODE:', MODE)
 
-axios.defaults.baseURL = MODE == 'development' ? '/api': 'http://api.chennick.wang'
+// axios.defaults.baseURL = MODE == 'development' ? '/api': 'http://api.chennick.wang'
+axios.defaults.baseURL = MODE == 'development' ? 'http://api.chennick.wang': 'http://api.chennick.wang'
 axios.defaults.withCredentials = true
 axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest'
 axios.defaults.headers['Authorization'] = `${localStorage.getItem('token') || null}`

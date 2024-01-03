@@ -20,7 +20,6 @@ function App() {
   const [showNav, setShowNav] = useState(false)
 
   useEffect(() => {
-    console.log('========:', pathname,needNav.includes(pathname))
     setShowNav(needNav.includes(pathname))
   }, [pathname])
 

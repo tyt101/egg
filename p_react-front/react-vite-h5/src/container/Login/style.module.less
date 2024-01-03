@@ -1,0 +1,57 @@
+.auth {
+  .title {
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 30px;
+  }
+  .head {
+    margin: 100px 50px;
+    display: flex;
+    align-items: center;
+    .gap {
+      margin: 0 15px;
+    }
+  }
+  .switch {
+    margin: 5px;
+    :global {
+      .za-switch__input {
+        background: rgb(122, 207, 61);
+        color: rgb(122, 207, 61);
+        border: 3px solid rgb(122, 207, 61);;
+      }
+    }
+  }
+  .bottom {
+    text-align: center;
+    position: fixed;
+    width: 100%;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    .line {
+      margin: 20px;
+      box-sizing: border-box;
+      height: 1px;
+      background-color: gray;
+    }
+  }
+  .operator {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    :global {
+      .za-button {
+        width: 250px;
+        border-radius: 20px;
+      }
+    }
+  }
+  .switch_change {
+    display: flex;
+    align-items: center;
+  }
+}

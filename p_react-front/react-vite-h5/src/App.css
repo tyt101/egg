@@ -1,3 +1,7 @@
 .za-tab-bar--hidden {
   display: none !important;
   }
+
+a {
+  color: black;
+}
