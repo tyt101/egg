@@ -60,22 +60,24 @@ class BillController extends Controller {
         return item;
       });
       const __list = _list.filter(item => {
+        console.log('moment(item.date)');
+        console.log(moment(item.date).format('YYYY-MM-DD'));
         if (!date) {
           return item;
         }
         return moment(item.date).format('YYYY-MM-DD') === date;
       });
+
       const listMap = __list.reduce((curArr, item) => {
         // 格式转换
-        const curDate = moment(item.date).format('YYYY-MM-DD');
-
+        const curDate = item.date && moment(item.date).format('YYYY-MM-DD');
         if (!curArr.length) {
           curArr.push({
             curDate,
             bills: [ item ],
           });
-        } else if (curArr && curDate && curArr.findIndex(item => item.date === curDate) > -1) {
-          const index = curArr.findIndex(item => item.date === curDate);
+        } else if (curArr.length && curDate && curArr.findIndex(item1 => item1.curDate === curDate) > -1) {
+          const index = curArr.findIndex(item => item.curDate === curDate);
           curArr[index].bills.push(item);
         } else {
           curArr.push({
@@ -85,7 +87,6 @@ class BillController extends Controller {
         }
         return curArr;
       }, []);
-
       listMap.sort((a, b) => moment(b.date) - moment(a.date));
 
       // 分页
