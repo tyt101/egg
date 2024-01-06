@@ -9,7 +9,7 @@ console.log('MODE:', MODE)
 axios.defaults.baseURL = MODE == 'development' ? '/api': 'http://api.chennick.wang'
 axios.defaults.withCredentials = true
 axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest'
-axios.defaults.headers['Authorization'] = `${localStorage.getItem('token') || null}`
+axios.defaults.headers['Authorization'] = `${localStorage.getItem('EGG_TOKEN') || null}`
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 
 

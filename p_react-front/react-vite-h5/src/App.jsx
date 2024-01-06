@@ -24,7 +24,7 @@ function App() {
   }, [pathname])
 
   return <>
-     <ConfigProvider primaryColor={'#007fff'}>
+     <ConfigProvider primaryColor={'#6FC835'}>
       <>
         <Routes>
           {routes.map(route => <Route exact key={route.path} path={route.path} element={<route.component />} />)}
