@@ -62,12 +62,12 @@ class BillController extends Controller {
         if (!date) {
           return item;
         }
-        return moment(item.date).format('YYYY-MM-DD') === date;
+        return moment(item.date).format('YYYY-MM') === moment(date).format('YYYY-MM');
       });
 
       const listMap = __list.reduce((curArr, item) => {
         // 格式转换
-        const curDate = item.date && moment(item.date).format('YYYY-MM-DD');
+        const curDate = item.date && moment(item.date).format('YYYY-MM');
         if (!curArr.length) {
           curArr.push({
             curDate,
