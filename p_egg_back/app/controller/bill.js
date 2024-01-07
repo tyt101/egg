@@ -45,8 +45,9 @@ class BillController extends Controller {
 
   async list() {
     const { ctx, app } = this;
-
-    const { date = '', page = 1, page_size = 5, type_id = 'all' } = ctx.query;
+    console.log(ctx.request.query)
+    const { date = '', page = 1, page_size = 5, type_id = 'all' } = ctx.request.query;
+    console.log(date, page, page_size)
     try {
       const token = ctx.request.header.authorization;
       const decode = await app.jwt.verify(token, app.config.jwt.secret);
@@ -60,8 +61,6 @@ class BillController extends Controller {
         return item;
       });
       const __list = _list.filter(item => {
-        console.log('moment(item.date)');
-        console.log(moment(item.date).format('YYYY-MM-DD'));
         if (!date) {
           return item;
         }
