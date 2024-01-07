@@ -45,9 +45,7 @@ class BillController extends Controller {
 
   async list() {
     const { ctx, app } = this;
-    console.log(ctx.request.query)
     const { date = '', page = 1, page_size = 5, type_id = 'all' } = ctx.request.query;
-    console.log(date, page, page_size)
     try {
       const token = ctx.request.header.authorization;
       const decode = await app.jwt.verify(token, app.config.jwt.secret);
@@ -56,7 +54,7 @@ class BillController extends Controller {
       const list = await ctx.service.bill.list(user_id);
       const _list = list.filter(item => {
         if (type_id !== 'all') {
-          return type_id === item.type_id;
+          return type_id == item.type_id;
         }
         return item;
       });
@@ -251,7 +249,6 @@ class BillController extends Controller {
       const end = moment(date).endOf('month').unix() * 1000; // 选择月份，月末时间
       // eslint-disable-next-line array-callback-return
       const _data = result.filter(item => {
-        console.log('ITEM:', item);
         if (moment(item.date) > start && moment(item.date) < end) {
           return item;
         }
@@ -303,7 +300,6 @@ class BillController extends Controller {
         },
       };
     } catch (error) {
-      console.log(error);
       ctx.body = {
         code: 500,
         msg: '系统错误',
