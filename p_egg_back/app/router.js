@@ -41,4 +41,7 @@ module.exports = app => {
 
   /** table */
   router.get('/api/bill/data', _jwt, controller.bill.data);
+
+  /** type */
+  router.get('/api/type/list', _jwt, controller.type.list);
 };
