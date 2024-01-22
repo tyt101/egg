@@ -6,6 +6,8 @@ import { Pull } from 'zarm'
 import Empty from '@/components/Empty'
 import PopupType from '@/components/PopupType'
 import PopupDate from '@/components/PopupDate'
+import PopupAddBill from '@/components/PopupAddBill'
+import CustomIcon from '@/components/CustomIcon'
 import { 
   get,
   REFRESH_STATE,
@@ -84,6 +86,10 @@ const Home = () => {
     dateRef.current && dateRef.current.show()
   }
 
+  const addRef = useRef(null)
+  const addToggle = () => {
+    addRef.current && addRef.current.show()
+  }
   return <div className={s.home}>
     <div className={s.header}>
       <div className={s.dataWrap}>
@@ -124,8 +130,10 @@ const Home = () => {
       </Pull> : <Empty />
     }
     </div>
+    <div className={s.add} onClick={addToggle}><CustomIcon type='icon-zhangdan1' /></div>
     <PopupType ref={typeRef} onSelect={selectType} />
     <PopupDate ref={dateRef} onSelect={selectDate} mode='month' />
+    <PopupAddBill ref={addRef} onReload={refreshData} />
   </div>
 }
 

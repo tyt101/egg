@@ -1,0 +1,69 @@
+.addWrap {
+  background-color: #fff;
+  padding: 15px;
+  .header {
+    display: flex;
+    justify-content: flex-end;
+    .close {
+      font-size: 15px;
+    }
+  }
+  .filter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    font-size: 12px;
+    margin: 5px 0;
+    .type {
+      span {
+        display: inline-block;
+        padding: 2px 15px;
+        border-radius: 20px;
+        margin-right: 5px;
+        background-color: rgb(246, 246, 246);
+      }
+    }
+    .time {
+      background-color: rgb(246, 246, 246);
+      padding: 2px 15px;
+      border-radius: 20px;
+      .arrow {
+      }
+    }
+  }
+  .money {
+    border-bottom: 1px solid gray;
+    .sufix, .amount {
+      font-size: 25px;
+      font-weight: bold;
+      margin-right: 15px;
+    }
+    .animation {
+      transition: all 0.5;
+    }
+  }
+  .scroll {
+    width: 100vw;
+    display: flex;
+    overflow-x: scroll;
+    .iconfontWrap {
+      padding: 5px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .name {
+        padding: 5px 0;
+        width: 40px;
+        text-align: center;
+      }
+      
+    }
+  }
+  .active_color {
+    color: #6FC835;
+  }
+  .active_border {
+    border: 1px solid #6FC835;
+  }
+}

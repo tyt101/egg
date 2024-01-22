@@ -43,7 +43,7 @@ const BillItem = ({bill}) => {
         
         title={
           <>
-          <CustomIcon className={s.itemIcon} type={item.type_id ? ICON_TYPE[item.type_id].icon : 1} />
+          <CustomIcon className={s.itemIcon} type={item.type_id ? ICON_TYPE[item?.type_id]?.icon : 1} />
           <span>{item.type_name}</span>
           </>
         }
