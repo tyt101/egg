@@ -87,7 +87,12 @@ class BillController extends Controller {
       listMap.sort((a, b) => moment(b.date) - moment(a.date));
 
       // 分页
-      const filterListMap = listMap.slice((page - 1) * page_size, page * page_size);
+      const filterListMap = listMap.slice((page - 1) * page_size, page * page_size).map(item => {
+        return {
+          curDate: item.curDate,
+          bills: item.bills.sort((a,b)=> b.id - a.id)
+        }
+      });
       // 总收入
       const totalIncome = _list.reduce((cur, item) => {
         if (item.pay_type === 1) {
@@ -104,7 +109,6 @@ class BillController extends Controller {
         }
         return cur;
       }, 0);
-
       ctx.body = {
         code: 200,
         msg: '请求成功',
