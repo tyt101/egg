@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef, useState, componentDidMount } from "react"
 import { Icon } from 'zarm'
 import s from './style.module.less'
 import BillItem from "@/components/BillItem"
@@ -92,7 +92,7 @@ const Home = () => {
   }
   return <div className={s.home}>
     <div className={s.header}>
-      <div className={s.dataWrap}>
+      <div className={s.dataWrap} onClick={() => {console.log("====")}}>
         <span className={s.expense}>总支出：<b>¥ {totalExpense}</b></span>
         <span className={s.income}>总收入：<b>¥ {totalIncome}</b></span>
       </div>

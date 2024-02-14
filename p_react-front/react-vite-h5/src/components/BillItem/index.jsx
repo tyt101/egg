@@ -33,7 +33,7 @@ const BillItem = ({bill}) => {
       bill && bill.bills.map(item => <SwipeAction
         key={item.id}
         right={[
-          <Button size="lg" key={1} shape="rect" theme="primary">
+          <Button className={s.Button} size="lg" key={1} shape="rect" theme="primary">
             删除
           </Button>
         ]}
