@@ -3,7 +3,8 @@ import {
   Popup,
   Button,
   Icon,
-  Keyboard
+  Keyboard,
+  Input
 } from 'zarm'
 import cx from 'classnames'
 import PopupDate from '@/components/PopupDate'
@@ -41,50 +42,80 @@ const PopupAddBill = forwardRef((props, addRef) => {
 
   const [amount, setAmount] = useState("")
   const onKeyClick = async(key) => {
+    console.log("======")
     if(key == "delete") {
       if(amount)
-      setAmount(amount.slice(0, -1))
+      setAmount((amount+"").slice(0, -1))
       return;
     }
     else if (key == 'ok') {
       addRef.current.close()
       setAmount("")
-      const res = await post("/api/bill/add", {
-        amount,
-        pay_type: payType == 'expense' ? 1 : 2,
-        type_name: currentType.name,
-        type_id: currentType.id,
-        date,
-        user_id: 1,
-        remark: 'remark',
-      })
+      if(!props.exitVal) {
+        const res = await post("/api/bill/add", {
+          amount,
+          pay_type: payType == 'expense' ? 1 : 2,
+          type_name: currentType.name,
+          type_id: currentType.id,
+          date,
+          remark: remark,
+        })
+      } else {
+        const res = await post("/api/bill/modify", {
+          id: props.exitVal.id,
+          amount,
+          pay_type: payType == 'expense' ? 1 : 2,
+          type_name: currentType.name,
+          type_id: currentType.id,
+          date,
+          remark: remark,
+        })
+      }
       if (props.onReload) props.onReload();
       return;
-    } else if(key == '.' && amount.includes('.')) {
+    } else if(key == '.' && (amount+"").includes('.')) {
       return;
-    } else if(key !== '.' && amount.includes('.') && amount.split('.')[1].length >= 2) {
+    } else if(key !== '.' && (amount+"").includes('.') && (amount+"").split('.')[1].length >= 2) {
       return;
     }
     else {
-      setAmount(amount + key)
+      setAmount((amount+"") + key)
       return;
     }
   }
   const [expense, setExpense] = useState([]); // 支出类型数组
   const [income, setIncome] = useState([]); // 收入类型数组
   const [currentType, setCurrentType] = useState({})
-
+  const [remark, setRemark] = useState('')
+  
   useEffect(async() => {
     const res = await get('/api/type/list')
     if(res.code == 200) {
       setExpense(res.data.list.filter(v => v.type == 2))
       setIncome(res.data.list.filter(v => v.type == 1))
-      if(payType == 'expense')
-      setCurrentType(expense[0])
-      else
-      setCurrentType(income[0])
+      if(!props.exitVal) {
+        if(payType == 'expense')
+        setCurrentType(expense[0])
+        else
+        setCurrentType(income[0])
+      }
     }
   }, [payType, show])
+  useEffect(() => {
+    if(props.exitVal) {
+      const {amount, date, pay_type, remark, type_id, type_name, user_id} = props.exitVal
+      setRemark(remark)
+      setAmount(amount)
+      setDate(date)
+      setPayType(pay_type === 2 ? 'income' : 'expense')
+      setCurrentType({
+        type: pay_type,
+        id: type_id,
+        name: type_name,
+        user_id
+      })
+    }
+  },[props.exitVal])
   return <Popup
     visible={show}
     direction="bottom"
@@ -104,7 +135,7 @@ const PopupAddBill = forwardRef((props, addRef) => {
             className={s.time}
             onClick={() => dateRef.current && dateRef.current.show()}
           >
-            { dayjs(date).format('MM-DD') }
+            { dayjs(date).format('YYYY-MM-DD') }
             <CustomIcon className={s.arrow} type="icon-xia-" />
           </div>
         </div>
@@ -124,9 +155,20 @@ const PopupAddBill = forwardRef((props, addRef) => {
           })
         }
         </div>
+        <div className={s.remark}>
+          <span>备注</span>
+          <Input
+            className={s.remark_name}
+            clearable
+            type="text"
+            placeholder="请输入备注"
+            value={remark}
+            onChange={(val) => setRemark(val)}
+          />
+        </div>
         <Keyboard type="price" onKeyClick={(value) => onKeyClick(value)} />
       </div>
-      <PopupDate ref={dateRef} onSelect={selectDate} mode='month'/>
+      <PopupDate ref={dateRef} onSelect={selectDate} mode='date'/>
     </div>
   </Popup>
 })

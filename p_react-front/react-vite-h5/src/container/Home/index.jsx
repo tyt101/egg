@@ -8,6 +8,7 @@ import PopupType from '@/components/PopupType'
 import PopupDate from '@/components/PopupDate'
 import PopupAddBill from '@/components/PopupAddBill'
 import CustomIcon from '@/components/CustomIcon'
+import Detail from "../Detail"
 import { 
   get,
   REFRESH_STATE,
@@ -92,7 +93,7 @@ const Home = () => {
   }
   return <div className={s.home}>
     <div className={s.header}>
-      <div className={s.dataWrap} onClick={() => {console.log("====")}}>
+      <div className={s.dataWrap}>
         <span className={s.expense}>总支出：<b>¥ {totalExpense}</b></span>
         <span className={s.income}>总收入：<b>¥ {totalIncome}</b></span>
       </div>
@@ -125,6 +126,7 @@ const Home = () => {
           list.map((item, index) => <BillItem
             bill={item}
             key={index}
+            refreshData={refreshData}
           />)
         }
       </Pull> : <Empty />

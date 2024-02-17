@@ -3,12 +3,19 @@ import PropTypes from 'prop-types'
 import s from './style.module.less'
 import { Cell, SwipeAction, Button } from "zarm";
 import CustomIcon from '@/components/CustomIcon'
-import { ICON_TYPE } from '@/utils'
-const BillItem = ({bill}) => {
+import { useNavigate ,useSearchParams} from "react-router-dom";
 
+import { ICON_TYPE } from '@/utils'
+import { 
+  get,
+  post,
+  REFRESH_STATE,
+  LOAD_STATE 
+} from "@/utils"
+const BillItem = ({bill, refreshData}) => {
   const [expense, setExpense] = useState(0)
   const [income, setIncome] = useState(0)
-
+  const navigate=useNavigate();
   useEffect(() => {
     const _income = bill.bills.filter(i => i.pay_type == 2).reduce((curr, item) => {
       curr += Number(item.amount);
@@ -21,6 +28,15 @@ const BillItem = ({bill}) => {
     }, 0);
     setExpense(_expense);
   }, [bill.bills])
+
+  const handleDelete = async(id) => {
+    await post(`/api/bill/del?id=${id}`);
+    refreshData()
+  }
+
+  const handleDetail = (id) => {
+    navigate(`/detail?id=${id}`)
+  }
   return <div className={s.item}>
     <div className={s.header}>
       <div className={s.date}>{bill.curDate}</div>
@@ -33,14 +49,14 @@ const BillItem = ({bill}) => {
       bill && bill.bills.map(item => <SwipeAction
         key={item.id}
         right={[
-          <Button className={s.Button} size="lg" key={1} shape="rect" theme="primary">
+          <Button onClick={() => handleDelete(item.id)} className={s.Button} size="lg" key={1} shape="rect" theme="primary">
             删除
           </Button>
         ]}
       >
         <Cell
         className={s.bill}
-        
+        onClick={() => handleDetail(item.id)}
         title={
           <>
           <CustomIcon className={s.itemIcon} type={item.type_id ? ICON_TYPE[item?.type_id]?.icon : 1} />
