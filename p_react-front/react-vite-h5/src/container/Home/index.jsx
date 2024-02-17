@@ -31,7 +31,6 @@ const Home = () => {
   const [totalIncome, setTotalIncome] = useState(0); // 总收入
   useEffect(() => {
     getList(date)
-    console.log(dateLabel)
   }, [date,typeLabel, type_id, page])
   const getList = async(date = '') => {
     const res = await get(`/api/bill/list?page=${page}&page_size=${page_size}&type_id=${type_id}&date=${date}`)
