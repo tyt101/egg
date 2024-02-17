@@ -43,7 +43,7 @@ class BillService extends Service {
         ...params,
       }, {
         where: {
-          id: 1,
+          id: params.id,
         },
       });
       return params.id;
