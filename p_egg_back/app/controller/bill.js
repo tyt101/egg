@@ -187,7 +187,6 @@ class BillController extends Controller {
       const decode = await app.jwt.verify(token, app.config.jwt.secret);
       if (!decode) return;
       const user_id = decode.id;
-      console.log("======ROW:", row,id)
       const result = await ctx.service.bill.modify({
         id,
         ...row,
