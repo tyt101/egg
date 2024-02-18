@@ -4,7 +4,7 @@ import s from './style.module.less'
 import { Cell, SwipeAction, Button } from "zarm";
 import CustomIcon from '@/components/CustomIcon'
 import { useNavigate ,useSearchParams} from "react-router-dom";
-
+import dayjs from "dayjs";
 import { ICON_TYPE } from '@/utils'
 import { 
   get,
@@ -67,7 +67,7 @@ const BillItem = ({bill, refreshData}) => {
           <span>{item.pay_type === 1 ? '-' : '+'} {item.amount}</span>
         }
         help={
-          <div>{item.date}</div>
+          <div>{dayjs(item.date).format("MM-DD")}</div>
         }
       ></Cell>
       </SwipeAction>)

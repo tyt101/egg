@@ -30,4 +30,41 @@
   .income {
     color: #6FC835;
   }
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .title {
+      font-size: 14px;
+    }
+    button {
+      margin: 0 5px;
+    }
+    button:focus-visible, button:focus {
+      border: none;
+      outline: none;
+    }
+    .active {
+      background-color: #6FC835;
+      color: #fff;
+    }
+  }
+  .list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    .li {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      align-items: center;
+      span {
+        margin-right: 10px;
+      }
+      .progress {
+        display: "inline-block";
+        width: "100%";
+      }
+    }
+  }
 }
