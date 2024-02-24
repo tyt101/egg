@@ -17,6 +17,7 @@ const Data = () => {
   const dateRef = useRef(null)
   const [curState, setCurState] = useState('')
   const handleExpense = () => {
+    setPieChart(curState == 'expense' ? expenseList : incomeList);
     if(curState !== 'expense') {
       setCurState('expense') 
       searchTotalMoneyCondition(dateLabel, 1)
@@ -68,17 +69,66 @@ const Data = () => {
     setIncomeList(incomeList)
     setExpense(expenseMoney)
     setExpenseList(expenseList)
+    
     if(type_id === 'all') {
       setListShow(list[0].bills)
+      setPieChart(list[0].bills);
     } else if( type_id == '1') {
       setListShow(expenseList)
+      setPieChart(expenseList);
     } else {
       setListShow(incomeList)
+      setPieChart(incomeList);
     }
   }
   useEffect(() => {
     searchTotalMoneyCondition(dateLabel)
+    return () => {
+      // 每次组件卸载的时候，需要释放图表实例。clear 只是将其清空不会释放。
+      proportionChart.dispose();
+    };
   }, [])
+
+  let proportionChart = null;
+  const setPieChart = (data) => {
+    if (window.echarts) {
+      // 初始化饼图，返回实例。
+      proportionChart = echarts.init(document.getElementById('proportion'));
+      proportionChart.setOption({
+          tooltip: {
+            trigger: 'item',
+            formatter: '{a} <br/>{b} : {c} ({d}%)'
+          },
+          // 图例
+          legend: {
+              top: '5%',
+              data: (data || []).map(item => {
+                return item.type_name
+              })
+          },
+          series: [
+            {
+              name: '支出',
+              type: 'pie',
+              radius: '55%',
+              data: data.map(item => {
+                return {
+                  value: item.amount,
+                  name: item.type_name
+                }
+              }),
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+              }
+            }
+          ]
+      })
+    };
+  };
   return <div className={s.data}>
     <div className={s.card}>
       <div className={s.content}>
@@ -121,7 +171,11 @@ const Data = () => {
       </div>
       {/* 饼状图 */}
       <div className={s.structure}>
-        <div id="proportion">饼状图位置</div>
+        <div className={s.header}>
+          <div className={s.title}>饼状图</div>
+
+        </div>
+        <div id="proportion"></div>
       </div>
     </div>
       
